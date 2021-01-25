@@ -1,5 +1,9 @@
 <template>
   <section>
+    <the-header
+      :quote-count="quotes.length"
+      :max-quotes="maxQuotes"
+    ></the-header>
     <add-quote @adding="addNewQuote"></add-quote>
     <quote-grid :quotes="quotes" @quoteDeleted="deleteQuote"></quote-grid>
     <div class="info-text">
@@ -11,9 +15,10 @@
 <script>
 import AddQuote from '../components/AddQuote.vue'
 import QuoteGrid from '../components/QuoteGrid.vue'
+import TheHeader from '../components/TheHeader.vue'
 
 export default {
-  components: { AddQuote, QuoteGrid },
+  components: { AddQuote, QuoteGrid, TheHeader },
   data() {
     return {
       quotes: [
@@ -22,11 +27,14 @@ export default {
         { id: 3, quote: 'testQuote 3' },
         { id: 4, quote: 'testQuote 4' },
       ],
-      maxQuotes: 10,
+      maxQuotes: 9,
     }
   },
   methods: {
     addNewQuote(quote) {
+      if (this.quotes.length >= this.maxQuotes) {
+        return alert('최대 개수 초과됐습니다. 먼저 지우세요')
+      }
       const quoteItem = {
         id: new Date().toISOString(),
         quote,
